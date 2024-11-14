@@ -3,9 +3,11 @@ use anchor_lang::prelude::*;
 
 use crate::{constants::TREASURY_FEE, errors::FundError};
 
-pub fn balanceValidator(wallet: AccountInfo) {
-    msg!("Before Lamport is ==========> {}", wallet.get_lamports());
+pub fn balance_validator(wallet: AccountInfo) -> Result<()> {
+    msg!("Current wallet balance in lamports: {}", wallet.get_lamports());
     if wallet.get_lamports() < TREASURY_FEE as u64 {
-        FundError::InsufficiencyError;
+        return Err(FundError::InsufficiencyError.into());
     }
+    Ok(())
 }
+
